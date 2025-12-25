@@ -10,6 +10,12 @@ const vazir = Vazirmatn({
 export const metadata: Metadata = {
   title: "MindOrbit | هوش مصنوعی",
   description: "Advanced AI Chatbot built by KiyaDev",
+  // این بخش جدید اضافه شد تا لوگوی جدید را بخواند
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

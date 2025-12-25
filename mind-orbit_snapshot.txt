@@ -1,0 +1,465 @@
+📁 PROJECT STRUCTURE
+================================================================================
+
+mind-orbit
+├── README.md
+├── app
+│   ├── api
+│   │   └── chat
+│   │       └── route.ts
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── eslint.config.mjs
+├── next-env.d.ts
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── public
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+└── tsconfig.json
+
+
+📄 FILE CONTENTS
+================================================================================
+
+================================================================================
+📄 FILE: eslint.config.mjs
+================================================================================
+
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+
+================================================================================
+📄 FILE: next-env.d.ts
+================================================================================
+
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/dev/types/routes.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+
+================================================================================
+📄 FILE: next.config.ts
+================================================================================
+
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+};
+
+export default nextConfig;
+
+================================================================================
+📄 FILE: package.json
+================================================================================
+
+{
+  "name": "mind-orbit",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "lucide-react": "^0.562.0",
+    "next": "16.1.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+
+================================================================================
+📄 FILE: postcss.config.mjs
+================================================================================
+
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+
+================================================================================
+📄 FILE: README.md
+================================================================================
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+================================================================================
+📄 FILE: tsconfig.json
+================================================================================
+
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+
+================================================================================
+📄 FILE: app\globals.css
+================================================================================
+
+@import "tailwindcss";
+
+:root {
+  background-color: #000000;
+  color: #ffffff;
+}
+================================================================================
+📄 FILE: app\layout.tsx
+================================================================================
+
+import type { Metadata } from "next";
+import { Vazirmatn } from "next/font/google";
+import "./globals.css";
+
+const vazir = Vazirmatn({
+  subsets: ["arabic"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "MindOrbit | هوش مصنوعی",
+  description: "Advanced AI Chatbot built by KiyaDev",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="fa" dir="rtl">
+      <body className={`${vazir.className} antialiased bg-black text-white`}>
+        {children}
+      </body>
+    </html>
+  );
+}
+================================================================================
+📄 FILE: app\page.tsx
+================================================================================
+
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { Send, Sparkles, Bot, User, Terminal, Cpu, MessageSquare } from "lucide-react";
+
+export default function Home() {
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // اسکرول خودکار به پایین وقتی پیام جدید میاد
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const sendMessage = async (textInput: string) => {
+    if (!textInput.trim()) return;
+
+    const userMessage = { role: "user", content: textInput };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: textInput }),
+      });
+      
+      const data = await res.json();
+      
+      // اگر خطا داشت
+      if (!res.ok) throw new Error(data.reply || "خطا در شبکه");
+
+      setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
+    } catch (error) {
+      setMessages((prev) => [...prev, { role: "bot", content: "متاسفانه ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید." }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
+    }
+  };
+
+  // سوالات پیشنهادی برای شروع
+  const suggestions = [
+    { title: "ایده پردازی", text: "یک ایده برای استارتاپ هوش مصنوعی بده", icon: <Sparkles className="w-5 h-5 text-yellow-400" /> },
+    { title: "برنامه‌نویسی", text: "کد یک ماشین حساب با پایتون رو بنویس", icon: <Terminal className="w-5 h-5 text-blue-400" /> },
+    { title: "تولید محتوا", text: "یک متن تبلیغاتی برای فروش کفش بنویس", icon: <MessageSquare className="w-5 h-5 text-green-400" /> },
+    { title: "اطلاعات عمومی", text: "تفاوت هوش مصنوعی و یادگیری ماشین چیه؟", icon: <Cpu className="w-5 h-5 text-purple-400" /> },
+  ];
+
+  return (
+    <div dir="rtl" className="flex flex-col h-screen bg-[#0f172a] text-gray-100 font-sans">
+      
+      {/* هدر سایت */}
+      <header className="p-4 border-b border-gray-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-10 flex items-center gap-3 shadow-lg">
+        <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-blue-500/20 shadow-lg">
+           <Bot className="text-white w-6 h-6" />
+        </div>
+        <div>
+          <h1 className="font-bold text-xl tracking-wide">MindOrbit AI</h1>
+          <p className="text-xs text-gray-400">دستیار هوشمند شما</p>
+        </div>
+      </header>
+
+      {/* بدنه اصلی */}
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+        
+        {/* حالت ۱: وقتی هنوز پیامی نیست (صفحه خوش‌آمدگویی) */}
+        {messages.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-center space-y-8 fade-in">
+            <div className="space-y-4 max-w-2xl">
+              <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 py-2">
+                چطور می‌توانم کمکتان کنم؟
+              </h2>
+              <p className="text-gray-400 text-lg">
+                من یک هوش مصنوعی پیشرفته هستم. هر سوالی داری بپرس یا از پیشنهادات زیر استفاده کن.
+              </p>
+            </div>
+
+            {/* کارت‌های پیشنهادی */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl px-4">
+              {suggestions.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => sendMessage(item.text)}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-gray-800/50 border border-gray-700 hover:bg-gray-800 hover:border-blue-500/50 transition-all group text-right"
+                >
+                  <div className="p-2 rounded-lg bg-gray-900 group-hover:bg-gray-800 transition">
+                    {item.icon}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-bold text-sm text-gray-200">{item.title}</div>
+                    <div className="text-xs text-gray-400 group-hover:text-gray-300">{item.text}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* حالت ۲: وقتی چت شروع شده */
+          <div className="max-w-3xl mx-auto space-y-6">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`flex gap-4 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+              >
+                {/* آیکون ربات */}
+                {msg.role === "bot" && (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <Bot className="w-5 h-5 text-white" />
+                  </div>
+                )}
+
+                {/* حباب پیام */}
+                <div
+                  className={`px-5 py-3 rounded-2xl max-w-[85%] leading-7 text-sm md:text-base shadow-md ${
+                    msg.role === "user"
+                      ? "bg-blue-600 text-white rounded-br-none"
+                      : "bg-gray-800 border border-gray-700 text-gray-100 rounded-bl-none"
+                  }`}
+                >
+                  {msg.content}
+                </div>
+
+                {/* آیکون کاربر */}
+                {msg.role === "user" && (
+                  <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mt-1">
+                    <User className="w-5 h-5 text-gray-300" />
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            {/* لودینگ در حین نوشتن ربات */}
+            {loading && (
+              <div className="flex gap-4 justify-start fade-in">
+                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="bg-gray-800 px-5 py-4 rounded-2xl rounded-bl-none border border-gray-700 flex items-center gap-1">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></div>
+                  </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </main>
+
+      {/* ورودی پایین صفحه */}
+      <div className="p-4 bg-[#0f172a] border-t border-gray-800">
+        <div className="max-w-3xl mx-auto relative">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="پیام خود را بنویسید..."
+            disabled={loading}
+            className="w-full bg-gray-900 text-gray-100 placeholder-gray-500 rounded-2xl pl-12 pr-4 py-4 border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-xl"
+          />
+          <button
+            onClick={() => sendMessage(input)}
+            disabled={loading || !input.trim()}
+            className="absolute left-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-blue-600 flex items-center justify-center aspect-square"
+          >
+            {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-5 h-5" />}
+          </button>
+        </div>
+        <p className="text-center text-gray-500 text-xs mt-3">
+          MindOrbit AI ممکن است اشتباه کند. لطفا اطلاعات حساس را بررسی کنید.
+        </p>
+      </div>
+    </div>
+  );
+}
+================================================================================
+📄 FILE: app\api\chat\route.ts
+================================================================================
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  try {
+    const apiKey = "AIzaSyCO9fA7mhMwUp2kcK8I4vD9d0Pa65AxwhI";
+    
+    const genAI = new GoogleGenerativeAI(apiKey);
+    
+    // تغییر نهایی: استفاده از مدل جدید و فعال 2.5
+    // اگر باز هم ارور داد، مدل "gemini-2.0-flash" را امتحان میکنیم
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const body = await req.json();
+    const message = body.message;
+
+    const result = await model.generateContent(message + " (پاسخ کوتاه و به فارسی)");
+    const response = await result.response;
+    const text = response.text();
+
+    return NextResponse.json({ reply: text });
+  } catch (error: any) {
+    console.error("GOOGLE ERROR:", error);
+    return NextResponse.json(
+      { reply: `خطا: ${error.message}` },
+      { status: 500 }
+    );
+  }
+}
