@@ -35,8 +35,10 @@ export default function Home() {
       if (!res.ok) throw new Error(data.reply || "خطا در شبکه");
 
       setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
-    } catch (error) {
-      setMessages((prev) => [...prev, { role: "bot", content: "متاسفانه ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید." }]);
+    } catch (error: any) {
+      // تغییر مهم: نمایش متن دقیق خطا برای عیب‌یابی
+      console.error(error);
+      setMessages((prev) => [...prev, { role: "bot", content: error.message || "متاسفانه ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید." }]);
     } finally {
       setLoading(false);
     }
