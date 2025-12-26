@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Sparkles, Bot, User, Terminal, Cpu, MessageSquare } from "lucide-react";
+// تغییر ۱: اضافه شدن Link و Network به ایمپورت‌ها
+import Link from "next/link";
+import { Send, Sparkles, Bot, User, Terminal, Cpu, MessageSquare, Network } from "lucide-react";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -9,7 +11,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // اسکرول خودکار به پایین وقتی پیام جدید میاد
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -31,28 +32,24 @@ export default function Home() {
       
       const data = await res.json();
       
-      // اگر خطا داشت
       if (!res.ok) throw new Error(data.reply || "خطا در شبکه");
 
       setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
     } catch (error: any) {
       console.error(error);
-      setMessages((prev) => [...prev, { role: "bot", content: error.message || "متاسفانه ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید." }]);
+      setMessages((prev) => [...prev, { role: "bot", content: error.message || "متاسفانه ارتباط با سرور برقرار نشد." }]);
     } finally {
       setLoading(false);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // اگر اینتر زده شد ولی شیفت پایین نبود، پیام رو بفرست
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage(input);
     }
-    // در غیر این صورت (یعنی اگر شیفت + اینتر بود) خود مرورگر میره خط بعدی (رفتار طبیعی Textarea)
   };
 
-  // سوالات پیشنهادی برای شروع
   const suggestions = [
     { title: "ایده پردازی", text: "یک ایده برای استارتاپ هوش مصنوعی بده", icon: <Sparkles className="w-5 h-5 text-yellow-400" /> },
     { title: "برنامه‌نویسی", text: "کد یک ماشین حساب با پایتون رو بنویس", icon: <Terminal className="w-5 h-5 text-blue-400" /> },
@@ -63,21 +60,34 @@ export default function Home() {
   return (
     <div dir="rtl" className="flex flex-col h-screen bg-[#0f172a] text-gray-100 font-sans">
       
-      {/* هدر سایت */}
-      <header className="p-4 border-b border-gray-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-10 flex items-center gap-3 shadow-lg">
-        <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-blue-500/20 shadow-lg">
-           <Bot className="text-white w-6 h-6" />
+      {/* هدر سایت - اصلاح شده */}
+      <header className="p-4 border-b border-gray-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-10 flex items-center justify-between shadow-lg">
+        
+        {/* سمت راست: لوگو و متن */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-blue-500/20 shadow-lg">
+             <Bot className="text-white w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="font-bold text-xl tracking-wide">MindOrbit AI</h1>
+            <p className="text-xs text-gray-400">دستیار هوشمند شما</p>
+          </div>
         </div>
-        <div>
-          <h1 className="font-bold text-xl tracking-wide">MindOrbit AI</h1>
-          <p className="text-xs text-gray-400">دستیار هوشمند شما</p>
-        </div>
+
+        {/* سمت چپ: دکمه لینک به همکاران */}
+        <Link 
+          href="/partners" 
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 px-3 py-2 rounded-lg transition-all text-xs text-gray-300 hover:text-white"
+        >
+          <Network className="w-4 h-4 text-emerald-400" />
+          <span className="hidden sm:inline">همکاران ما</span>
+        </Link>
+
       </header>
 
       {/* بدنه اصلی */}
       <main className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
         
-        {/* حالت ۱: وقتی هنوز پیامی نیست (صفحه خوش‌آمدگویی) */}
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-8 fade-in">
             <div className="space-y-4 max-w-2xl">
@@ -89,7 +99,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* کارت‌های پیشنهادی */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl px-4">
               {suggestions.map((item, index) => (
                 <button
@@ -109,21 +118,18 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          /* حالت ۲: وقتی چت شروع شده */
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg, index) => (
               <div
                 key={index}
                 className={`flex gap-4 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
-                {/* آیکون ربات */}
                 {msg.role === "bot" && (
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0 mt-1">
                     <Bot className="w-5 h-5 text-white" />
                   </div>
                 )}
 
-                {/* حباب پیام */}
                 <div
                   className={`px-5 py-3 rounded-2xl max-w-[85%] leading-7 text-sm md:text-base shadow-md whitespace-pre-wrap ${
                     msg.role === "user"
@@ -134,7 +140,6 @@ export default function Home() {
                   {msg.content}
                 </div>
 
-                {/* آیکون کاربر */}
                 {msg.role === "user" && (
                   <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mt-1">
                     <User className="w-5 h-5 text-gray-300" />
@@ -143,7 +148,6 @@ export default function Home() {
               </div>
             ))}
             
-            {/* لودینگ در حین نوشتن ربات */}
             {loading && (
               <div className="flex gap-4 justify-start fade-in">
                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
@@ -164,7 +168,6 @@ export default function Home() {
       {/* ورودی پایین صفحه */}
       <div className="p-4 bg-[#0f172a] border-t border-gray-800">
         <div className="max-w-3xl mx-auto relative flex items-end bg-gray-900 rounded-2xl border border-gray-700 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-xl">
-          {/* تغییر: تبدیل input به textarea */}
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -173,7 +176,7 @@ export default function Home() {
             disabled={loading}
             rows={1}
             className="w-full bg-transparent text-gray-100 placeholder-gray-500 rounded-2xl pl-12 pr-4 py-4 focus:outline-none resize-none min-h-[56px] max-h-40 scrollbar-thin scrollbar-thumb-gray-700"
-            style={{ height: input ? 'auto' : '56px' }} // تنظیم ارتفاع ساده
+            style={{ height: input ? 'auto' : '56px' }}
           />
           <button
             onClick={() => sendMessage(input)}
