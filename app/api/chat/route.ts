@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    // خواندن کلید از متغیرهای محیطی (امن)
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
@@ -11,8 +12,8 @@ export async function POST(req: Request) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // تنظیم دقیق روی نسخه 3 فلش (Preview)
-    const model = genAI.getGenerativeModel({ model: "gemini-3.0-flash-preview" });
+    // استفاده از نسخه 2.5 فلش (طبق دستور شما)
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
     const body = await req.json();
     const message = body.message;
