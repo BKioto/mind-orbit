@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-// تغییر ۱: اضافه شدن Link و Network به ایمپورت‌ها
 import Link from "next/link";
 import { Send, Sparkles, Bot, User, Terminal, Cpu, MessageSquare, Network } from "lucide-react";
 
@@ -60,7 +59,7 @@ export default function Home() {
   return (
     <div dir="rtl" className="flex flex-col h-screen bg-[#0f172a] text-gray-100 font-sans">
       
-      {/* هدر سایت - اصلاح شده */}
+      {/* هدر سایت */}
       <header className="p-4 border-b border-gray-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-10 flex items-center justify-between shadow-lg">
         
         {/* سمت راست: لوگو و متن */}
@@ -74,9 +73,11 @@ export default function Home() {
           </div>
         </div>
 
-        {/* سمت چپ: دکمه لینک به همکاران */}
+        {/* سمت چپ: دکمه لینک به همکاران (سئو شده) */}
         <Link 
           href="/partners" 
+          title="مشاهده همکاران تجاری و پروژه‌ها"
+          aria-label="صفحه همکاران تجاری"
           className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 px-3 py-2 rounded-lg transition-all text-xs text-gray-300 hover:text-white"
         >
           <Network className="w-4 h-4 text-emerald-400" />
