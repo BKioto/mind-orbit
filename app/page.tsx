@@ -36,7 +36,6 @@ export default function Home() {
 
       setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
     } catch (error: any) {
-      // تغییر مهم: نمایش متن دقیق خطا برای عیب‌یابی
       console.error(error);
       setMessages((prev) => [...prev, { role: "bot", content: error.message || "متاسفانه ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید." }]);
     } finally {
@@ -45,10 +44,12 @@ export default function Home() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    // اگر اینتر زده شد ولی شیفت پایین نبود، پیام رو بفرست
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage(input);
     }
+    // در غیر این صورت (یعنی اگر شیفت + اینتر بود) خود مرورگر میره خط بعدی (رفتار طبیعی Textarea)
   };
 
   // سوالات پیشنهادی برای شروع
@@ -124,7 +125,7 @@ export default function Home() {
 
                 {/* حباب پیام */}
                 <div
-                  className={`px-5 py-3 rounded-2xl max-w-[85%] leading-7 text-sm md:text-base shadow-md ${
+                  className={`px-5 py-3 rounded-2xl max-w-[85%] leading-7 text-sm md:text-base shadow-md whitespace-pre-wrap ${
                     msg.role === "user"
                       ? "bg-blue-600 text-white rounded-br-none"
                       : "bg-gray-800 border border-gray-700 text-gray-100 rounded-bl-none"
@@ -162,19 +163,22 @@ export default function Home() {
 
       {/* ورودی پایین صفحه */}
       <div className="p-4 bg-[#0f172a] border-t border-gray-800">
-        <div className="max-w-3xl mx-auto relative">
-          <input
+        <div className="max-w-3xl mx-auto relative flex items-end bg-gray-900 rounded-2xl border border-gray-700 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-xl">
+          {/* تغییر: تبدیل input به textarea */}
+          <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="پیام خود را بنویسید..."
             disabled={loading}
-            className="w-full bg-gray-900 text-gray-100 placeholder-gray-500 rounded-2xl pl-12 pr-4 py-4 border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-xl"
+            rows={1}
+            className="w-full bg-transparent text-gray-100 placeholder-gray-500 rounded-2xl pl-12 pr-4 py-4 focus:outline-none resize-none min-h-[56px] max-h-40 scrollbar-thin scrollbar-thumb-gray-700"
+            style={{ height: input ? 'auto' : '56px' }} // تنظیم ارتفاع ساده
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={loading || !input.trim()}
-            className="absolute left-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-blue-600 flex items-center justify-center aspect-square"
+            className="absolute left-2 bottom-2 bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-blue-600 flex items-center justify-center aspect-square h-10 w-10"
           >
             {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-5 h-5" />}
           </button>
