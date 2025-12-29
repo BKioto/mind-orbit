@@ -8,7 +8,7 @@ const vazir = Vazirmatn({
 });
 
 export const metadata: Metadata = {
-  title: "MindOrbit | هوش مصنوعی",
+  title: "MindOrbit | هوش مصنوعی و چت بات پیشرفته مایند اوربیت",
   description: "Advanced AI Chatbot built by KiyaDev",
   icons: {
     icon: "/logo.svg",
