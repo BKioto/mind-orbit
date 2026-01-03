@@ -2,26 +2,25 @@
 ================================================================================
 
 mind-orbit
+├── .env.local
 ├── README.md
 ├── app
 │   ├── api
 │   │   └── chat
 │   │       └── route.ts
-│   ├── favicon.ico
 │   ├── globals.css
 │   ├── layout.tsx
-│   └── page.tsx
+│   ├── page.tsx
+│   └── partners
+│       ├── layout.tsx
+│       └── page.tsx
 ├── eslint.config.mjs
 ├── next-env.d.ts
 ├── next.config.ts
 ├── package.json
 ├── postcss.config.mjs
 ├── public
-│   ├── file.svg
-│   ├── globe.svg
-│   ├── next.svg
-│   ├── vercel.svg
-│   └── window.svg
+│   └── logo.svg
 └── tsconfig.json
 
 
@@ -223,8 +222,17 @@ const vazir = Vazirmatn({
 });
 
 export const metadata: Metadata = {
-  title: "MindOrbit | هوش مصنوعی",
+  title: "MindOrbit | هوش مصنوعی و چت بات پیشرفته مایند اوربیت",
   description: "Advanced AI Chatbot built by KiyaDev",
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
+  // این بخش تاییدیه گوگل هست که اضافه شد
+  verification: {
+    google: "sLK4JJOaw4XxKgoHn42-ry2fAMpI17zKnAUyLjKI6mk",
+  },
 };
 
 export default function RootLayout({
@@ -247,7 +255,8 @@ export default function RootLayout({
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Sparkles, Bot, User, Terminal, Cpu, MessageSquare } from "lucide-react";
+import Link from "next/link";
+import { Send, Sparkles, Bot, User, Terminal, Cpu, MessageSquare, Network } from "lucide-react";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -255,7 +264,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // اسکرول خودکار به پایین وقتی پیام جدید میاد
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -277,12 +285,12 @@ export default function Home() {
       
       const data = await res.json();
       
-      // اگر خطا داشت
       if (!res.ok) throw new Error(data.reply || "خطا در شبکه");
 
       setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
-    } catch (error) {
-      setMessages((prev) => [...prev, { role: "bot", content: "متاسفانه ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید." }]);
+    } catch (error: any) {
+      console.error(error);
+      setMessages((prev) => [...prev, { role: "bot", content: error.message || "متاسفانه ارتباط با سرور برقرار نشد." }]);
     } finally {
       setLoading(false);
     }
@@ -295,7 +303,6 @@ export default function Home() {
     }
   };
 
-  // سوالات پیشنهادی برای شروع
   const suggestions = [
     { title: "ایده پردازی", text: "یک ایده برای استارتاپ هوش مصنوعی بده", icon: <Sparkles className="w-5 h-5 text-yellow-400" /> },
     { title: "برنامه‌نویسی", text: "کد یک ماشین حساب با پایتون رو بنویس", icon: <Terminal className="w-5 h-5 text-blue-400" /> },
@@ -307,20 +314,35 @@ export default function Home() {
     <div dir="rtl" className="flex flex-col h-screen bg-[#0f172a] text-gray-100 font-sans">
       
       {/* هدر سایت */}
-      <header className="p-4 border-b border-gray-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-10 flex items-center gap-3 shadow-lg">
-        <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-blue-500/20 shadow-lg">
-           <Bot className="text-white w-6 h-6" />
+      <header className="p-4 border-b border-gray-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-10 flex items-center justify-between shadow-lg">
+        
+        {/* سمت راست: لوگو و متن */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-blue-500/20 shadow-lg">
+             <Bot className="text-white w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="font-bold text-xl tracking-wide">MindOrbit AI</h1>
+            <p className="text-xs text-gray-400">دستیار هوشمند شما</p>
+          </div>
         </div>
-        <div>
-          <h1 className="font-bold text-xl tracking-wide">MindOrbit AI</h1>
-          <p className="text-xs text-gray-400">دستیار هوشمند شما</p>
-        </div>
+
+        {/* سمت چپ: دکمه لینک به همکاران (سئو شده) */}
+        <Link 
+          href="/partners" 
+          title="مشاهده همکاران تجاری و پروژه‌ها"
+          aria-label="صفحه همکاران تجاری"
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 px-3 py-2 rounded-lg transition-all text-xs text-gray-300 hover:text-white"
+        >
+          <Network className="w-4 h-4 text-emerald-400" />
+          <span className="hidden sm:inline">همکاران ما</span>
+        </Link>
+
       </header>
 
       {/* بدنه اصلی */}
       <main className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
         
-        {/* حالت ۱: وقتی هنوز پیامی نیست (صفحه خوش‌آمدگویی) */}
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-8 fade-in">
             <div className="space-y-4 max-w-2xl">
@@ -332,7 +354,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* کارت‌های پیشنهادی */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl px-4">
               {suggestions.map((item, index) => (
                 <button
@@ -352,23 +373,20 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          /* حالت ۲: وقتی چت شروع شده */
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg, index) => (
               <div
                 key={index}
                 className={`flex gap-4 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
-                {/* آیکون ربات */}
                 {msg.role === "bot" && (
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0 mt-1">
                     <Bot className="w-5 h-5 text-white" />
                   </div>
                 )}
 
-                {/* حباب پیام */}
                 <div
-                  className={`px-5 py-3 rounded-2xl max-w-[85%] leading-7 text-sm md:text-base shadow-md ${
+                  className={`px-5 py-3 rounded-2xl max-w-[85%] leading-7 text-sm md:text-base shadow-md whitespace-pre-wrap ${
                     msg.role === "user"
                       ? "bg-blue-600 text-white rounded-br-none"
                       : "bg-gray-800 border border-gray-700 text-gray-100 rounded-bl-none"
@@ -377,7 +395,6 @@ export default function Home() {
                   {msg.content}
                 </div>
 
-                {/* آیکون کاربر */}
                 {msg.role === "user" && (
                   <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 mt-1">
                     <User className="w-5 h-5 text-gray-300" />
@@ -386,7 +403,6 @@ export default function Home() {
               </div>
             ))}
             
-            {/* لودینگ در حین نوشتن ربات */}
             {loading && (
               <div className="flex gap-4 justify-start fade-in">
                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
@@ -406,19 +422,21 @@ export default function Home() {
 
       {/* ورودی پایین صفحه */}
       <div className="p-4 bg-[#0f172a] border-t border-gray-800">
-        <div className="max-w-3xl mx-auto relative">
-          <input
+        <div className="max-w-3xl mx-auto relative flex items-end bg-gray-900 rounded-2xl border border-gray-700 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-xl">
+          <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="پیام خود را بنویسید..."
             disabled={loading}
-            className="w-full bg-gray-900 text-gray-100 placeholder-gray-500 rounded-2xl pl-12 pr-4 py-4 border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-xl"
+            rows={1}
+            className="w-full bg-transparent text-gray-100 placeholder-gray-500 rounded-2xl pl-12 pr-4 py-4 focus:outline-none resize-none min-h-[56px] max-h-40 scrollbar-thin scrollbar-thumb-gray-700"
+            style={{ height: input ? 'auto' : '56px' }}
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={loading || !input.trim()}
-            className="absolute left-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-blue-600 flex items-center justify-center aspect-square"
+            className="absolute left-2 bottom-2 bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-blue-600 flex items-center justify-center aspect-square h-10 w-10"
           >
             {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-5 h-5" />}
           </button>
@@ -439,13 +457,17 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const apiKey = "AIzaSyCO9fA7mhMwUp2kcK8I4vD9d0Pa65AxwhI";
-    
+    // خواندن کلید از متغیرهای محیطی (امن)
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      throw new Error("API Key یافت نشد. لطفا تنظیمات سرور را چک کنید.");
+    }
+
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // تغییر نهایی: استفاده از مدل جدید و فعال 2.5
-    // اگر باز هم ارور داد، مدل "gemini-2.0-flash" را امتحان میکنیم
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // استفاده از نسخه 2.5 فلش (طبق دستور شما)
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
     const body = await req.json();
     const message = body.message;
@@ -462,4 +484,232 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+}
+================================================================================
+📄 FILE: app\partners\layout.tsx
+================================================================================
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "شبکه همکاران تجاری | MindOrbit AI",
+  description: "معرفی کسب‌وکارهای همکار و پروژه‌های تحت حمایت مایند اوربیت. دریافت خدمات ویژه از تیوان اکس، کیادو و سایر شرکای تجاری.",
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export default function PartnersLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
+}
+================================================================================
+📄 FILE: app\partners\page.tsx
+================================================================================
+
+// C:\projects\mind-orbit\app\partners\page.tsx
+
+"use client";
+
+import { 
+  ExternalLink, 
+  Code2, 
+  ShoppingBag, 
+  Truck, 
+  Gem, 
+  Briefcase, 
+  Network, 
+  ArrowRight, 
+  Bitcoin,
+  Zap,             // برای Nexus Solana
+  LayoutDashboard, // برای Alpha System
+  Shirt,           // برای Luxe Shop
+  Bot              // برای خود Mind Orbit (در لیست نیست ولی آیکونش هست)
+} from "lucide-react";
+import Link from "next/link";
+
+// لیست کامل ۸ همکار تجاری و پروژه
+const partners = [
+  // 1. KiyaDev
+  {
+    id: 1,
+    title: "کیا دِو | امپراتوری نرم‌افزار",
+    description: "تیم توسعه‌دهنده نخبه در زمینه طراحی وب‌سایت‌های اختصاصی، اپلیکیشن‌های موبایل (Flutter & React Native)، بلاکچین و هوش مصنوعی.",
+    features: ["توسعه دهنده اصلی", "بلاکچین و Web3", "هوش مصنوعی"],
+    url: "https://kiyadev.ir", 
+    icon: Code2,
+    color: "text-blue-400",
+    borderColor: "group-hover:border-blue-500/50",
+    glow: "group-hover:shadow-blue-500/20"
+  },
+  // 2. Tivan Ex
+  {
+    id: 2,
+    title: "صرافی ارز دیجیتال تیوان اکس",
+    description: "پلتفرم معاملاتی نسل ۳ با امنیت سایبری در کلاس جهانی. خرید و فروش آنی بیت‌کوین و تتر با موتور مچینگ فراصوت و کیف پول سرد.",
+    features: ["معاملات آنی", "امنیت نظامی", "کمترین کارمزد"],
+    url: "https://tivan-ex.vercel.app", 
+    icon: Bitcoin, 
+    color: "text-emerald-400",
+    borderColor: "group-hover:border-emerald-500/50",
+    glow: "group-hover:shadow-emerald-500/20"
+  },
+  // 3. Nexus Solana
+  {
+    id: 3,
+    title: "نکسوس سولانا | توکن‌ساز",
+    description: "اولین پلتفرم No-Code ساخت توکن روی شبکه سولانا. ایجاد ارز دیجیتال شخصی و میم‌کوین در کمتر از ۱ دقیقه با هزینه ناچیز و امنیت بلاکچینی.",
+    features: ["ساخت توکن SPL", "شبکه پرسرعت سولانا", "بدون کدنویسی"],
+    url: "https://nexus-solana-taupe.vercel.app",
+    icon: Zap,
+    color: "text-fuchsia-400", 
+    borderColor: "group-hover:border-fuchsia-500/50",
+    glow: "group-hover:shadow-fuchsia-500/20"
+  },
+  // 4. Alpha System
+  {
+    id: 4,
+    title: "آلفا سیستم | داشبورد مدیریتی",
+    description: "سامانه جامع مدیریت منابع سازمانی (ERP). مدیریت هوشمند پرسنل، حقوق و دستمزد، و کنترل پروژه‌ها با ابزارهای بصری و نمودارهای تحلیلی.",
+    features: ["پنل مدیریت ERP", "مدیریت پروژه‌ها (Kanban)", "تحلیل داده‌ها"],
+    url: "https://alpha-system-eight.vercel.app",
+    icon: LayoutDashboard,
+    color: "text-orange-400",
+    borderColor: "group-hover:border-orange-500/50",
+    glow: "group-hover:shadow-orange-500/20"
+  },
+  // 5. Luxe Shop
+  {
+    id: 5,
+    title: "لوکس شاپ | استایل و مد",
+    description: "فروشگاه اینترنتی مدرن پوشاک و اکسسوری. تجربه خریدی لوکس با رابط کاربری مینیمال، سبد خرید هوشمند و فرآیند پرداخت آسان.",
+    features: ["فروشگاه آنلاین مدرن", "مد و فشن", "تجربه کاربری عالی"],
+    url: "https://luxe-shop-ten.vercel.app",
+    icon: Shirt,
+    color: "text-amber-400",
+    borderColor: "group-hover:border-amber-500/50",
+    glow: "group-hover:shadow-amber-500/20"
+  },
+  // 6. Coconut
+  {
+    id: 6,
+    title: "فروشگاه آنلاین کوکونات",
+    description: "بازار آنلاین میوه و پروتئین شهر پرند. خرید آنلاین تازه‌ترین محصولات با تحویل فوری درب منزل. تجربه‌ای راحت و سریع.",
+    features: ["مارکت‌پلیس محلی", "لجستیک هوشمند", "تحویل فوری"],
+    url: "https://cocodelivery.ir", 
+    icon: Truck,
+    color: "text-green-400",
+    borderColor: "group-hover:border-green-500/50",
+    glow: "group-hover:shadow-green-500/20"
+  },
+  // 7. Alef Gem
+  {
+    id: 7,
+    title: "گالری جواهرات اَلِف جِم",
+    description: "طراحی و ساخت جواهرات دست‌ساز با طلای ۱۸ عیار و سنگ‌های قیمتی اصل. ترکیب هنر مینیمال و مدرن برای خلق آثار ماندگار.",
+    features: ["لوکس و فشن", "سنگ‌های قیمتی", "طراحی اختصاصی"],
+    url: "https://alefgem.com", 
+    icon: Gem,
+    color: "text-purple-400",
+    borderColor: "group-hover:border-purple-500/50",
+    glow: "group-hover:shadow-purple-500/20"
+  },
+  // 8. Soughat Shop
+  {
+    id: 8,
+    title: "سوغات شاپ اینترنشنال",
+    description: "اولین پلتفرم ارسال هدیه به ایران با پرداخت ارزی و کریپتو. پل ارتباطی ایرانیان خارج از کشور با عزیزانشان.",
+    features: ["پرداخت کریپتو", "فین‌تک فرامرزی", "E-Commerce"],
+    url: "https://soughat.shop", 
+    icon: ShoppingBag,
+    color: "text-rose-400",
+    borderColor: "group-hover:border-rose-500/50",
+    glow: "group-hover:shadow-rose-500/20"
+  }
+];
+
+export default function PartnersPage() {
+  return (
+    <div className="min-h-screen bg-slate-950 pt-24 pb-10 px-4 sm:px-8 relative overflow-hidden font-sans" dir="rtl">
+      
+      {/* بک‌گراند نوری */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
+      
+      <div className="container mx-auto max-w-6xl">
+        
+        {/* هدر صفحه */}
+        <div className="mb-12">
+            <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white mb-6 transition-colors text-sm">
+                <ArrowRight className="w-4 h-4" />
+                بازگشت به چت
+            </Link>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center gap-3">
+                <Network className="text-blue-500" />
+                شبکه همکاران تجاری
+            </h1>
+            <p className="text-slate-400 max-w-2xl leading-8 text-lg">
+                مایند اوربیت (MindOrbit) بخشی از یک اکوسیستم بزرگتر است. در این بخش، مجموعه‌ای از پروژه‌های منتخب و کسب‌وکارهای معتبری که از زیرساخت‌های فنی یا هوش مصنوعی ما استفاده می‌کنند را معرفی می‌کنیم.
+            </p>
+        </div>
+
+        {/* گرید کارت‌ها */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+          {partners.map((partner) => (
+            <a
+              key={partner.id}
+              href={partner.url}
+              target="_blank"
+              rel="dofollow" // 👈 مهم برای سئو
+              className={`group relative flex flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${partner.borderColor} ${partner.glow}`}
+            >
+              <div>
+                {/* هدر کارت */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`rounded-2xl p-3 bg-slate-950 border border-slate-800 ${partner.color}`}>
+                    <partner.icon size={28} strokeWidth={1.5} />
+                  </div>
+                  <div className="rounded-full bg-slate-950 border border-slate-800 px-3 py-1 flex items-center gap-1">
+                     <Briefcase size={12} className="text-slate-500" />
+                    <span className="text-[10px] text-slate-500 font-mono uppercase">Partner</span>
+                  </div>
+                </div>
+
+                <h2 className="mb-3 text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                  {partner.title}
+                </h2>
+                
+                <p className="text-sm leading-7 text-slate-400 mb-6 text-justify opacity-80 group-hover:opacity-100 transition-opacity">
+                  {partner.description}
+                </p>
+
+                {/* تگ‌ها */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {partner.features.map((feature, idx) => (
+                    <span key={idx} className="text-[11px] bg-slate-950/80 text-slate-500 border border-slate-800 px-2.5 py-1 rounded-lg">
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* فوتر کارت */}
+              <div className="mt-auto border-t border-slate-800 pt-4 flex items-center justify-between">
+                <span className={`text-xs font-bold transition-colors ${partner.color}`}>
+                  بازدید از وب‌سایت
+                </span>
+                <div className="flex items-center gap-1 text-slate-600 group-hover:text-white transition-colors">
+                  <span className="text-xs font-mono hidden sm:inline-block">{partner.url.replace('https://', '')}</span>
+                  <ExternalLink size={14} />
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }

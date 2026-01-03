@@ -1,11 +1,27 @@
+// C:\projects\mind-orbit\app\partners\page.tsx
+
 "use client";
 
-import { ExternalLink, Code2, ShoppingBag, Truck, Gem, Briefcase, Network, Bitcoin } from "lucide-react";
+import { 
+  ExternalLink, 
+  Code2, 
+  ShoppingBag, 
+  Truck, 
+  Gem, 
+  Briefcase, 
+  Network, 
+  ArrowRight, 
+  Bitcoin,
+  Zap,             // برای Nexus Solana
+  LayoutDashboard, // برای Alpha System
+  Shirt,           // برای Luxe Shop
+  Bot              // برای خود Mind Orbit (در لیست نیست ولی آیکونش هست)
+} from "lucide-react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
-// لیست پروژه‌ها (شامل تیوان اکس)
+// لیست کامل ۸ همکار تجاری و پروژه
 const partners = [
+  // 1. KiyaDev
   {
     id: 1,
     title: "کیا دِو | امپراتوری نرم‌افزار",
@@ -17,19 +33,57 @@ const partners = [
     borderColor: "group-hover:border-blue-500/50",
     glow: "group-hover:shadow-blue-500/20"
   },
+  // 2. Tivan Ex
   {
     id: 2,
     title: "صرافی ارز دیجیتال تیوان اکس",
     description: "پلتفرم معاملاتی نسل ۳ با امنیت سایبری در کلاس جهانی. خرید و فروش آنی بیت‌کوین و تتر با موتور مچینگ فراصوت و کیف پول سرد.",
     features: ["معاملات آنی", "امنیت نظامی", "کمترین کارمزد"],
     url: "https://tivan-ex.vercel.app", 
-    icon: Bitcoin, // آیکون مناسب برای صرافی
+    icon: Bitcoin, 
     color: "text-emerald-400",
     borderColor: "group-hover:border-emerald-500/50",
     glow: "group-hover:shadow-emerald-500/20"
   },
+  // 3. Nexus Solana
   {
     id: 3,
+    title: "نکسوس سولانا | توکن‌ساز",
+    description: "اولین پلتفرم No-Code ساخت توکن روی شبکه سولانا. ایجاد ارز دیجیتال شخصی و میم‌کوین در کمتر از ۱ دقیقه با هزینه ناچیز و امنیت بلاکچینی.",
+    features: ["ساخت توکن SPL", "شبکه پرسرعت سولانا", "بدون کدنویسی"],
+    url: "https://nexus-solana-taupe.vercel.app",
+    icon: Zap,
+    color: "text-fuchsia-400", 
+    borderColor: "group-hover:border-fuchsia-500/50",
+    glow: "group-hover:shadow-fuchsia-500/20"
+  },
+  // 4. Alpha System
+  {
+    id: 4,
+    title: "آلفا سیستم | داشبورد مدیریتی",
+    description: "سامانه جامع مدیریت منابع سازمانی (ERP). مدیریت هوشمند پرسنل، حقوق و دستمزد، و کنترل پروژه‌ها با ابزارهای بصری و نمودارهای تحلیلی.",
+    features: ["پنل مدیریت ERP", "مدیریت پروژه‌ها (Kanban)", "تحلیل داده‌ها"],
+    url: "https://alpha-system-eight.vercel.app",
+    icon: LayoutDashboard,
+    color: "text-orange-400",
+    borderColor: "group-hover:border-orange-500/50",
+    glow: "group-hover:shadow-orange-500/20"
+  },
+  // 5. Luxe Shop
+  {
+    id: 5,
+    title: "لوکس شاپ | استایل و مد",
+    description: "فروشگاه اینترنتی مدرن پوشاک و اکسسوری. تجربه خریدی لوکس با رابط کاربری مینیمال، سبد خرید هوشمند و فرآیند پرداخت آسان.",
+    features: ["فروشگاه آنلاین مدرن", "مد و فشن", "تجربه کاربری عالی"],
+    url: "https://luxe-shop-ten.vercel.app",
+    icon: Shirt,
+    color: "text-amber-400",
+    borderColor: "group-hover:border-amber-500/50",
+    glow: "group-hover:shadow-amber-500/20"
+  },
+  // 6. Coconut
+  {
+    id: 6,
     title: "فروشگاه آنلاین کوکونات",
     description: "بازار آنلاین میوه و پروتئین شهر پرند. خرید آنلاین تازه‌ترین محصولات با تحویل فوری درب منزل. تجربه‌ای راحت و سریع.",
     features: ["مارکت‌پلیس محلی", "لجستیک هوشمند", "تحویل فوری"],
@@ -39,8 +93,9 @@ const partners = [
     borderColor: "group-hover:border-green-500/50",
     glow: "group-hover:shadow-green-500/20"
   },
+  // 7. Alef Gem
   {
-    id: 4,
+    id: 7,
     title: "گالری جواهرات اَلِف جِم",
     description: "طراحی و ساخت جواهرات دست‌ساز با طلای ۱۸ عیار و سنگ‌های قیمتی اصل. ترکیب هنر مینیمال و مدرن برای خلق آثار ماندگار.",
     features: ["لوکس و فشن", "سنگ‌های قیمتی", "طراحی اختصاصی"],
@@ -50,8 +105,9 @@ const partners = [
     borderColor: "group-hover:border-purple-500/50",
     glow: "group-hover:shadow-purple-500/20"
   },
+  // 8. Soughat Shop
   {
-    id: 5,
+    id: 8,
     title: "سوغات شاپ اینترنشنال",
     description: "اولین پلتفرم ارسال هدیه به ایران با پرداخت ارزی و کریپتو. پل ارتباطی ایرانیان خارج از کشور با عزیزانشان.",
     features: ["پرداخت کریپتو", "فین‌تک فرامرزی", "E-Commerce"],
@@ -70,7 +126,7 @@ export default function PartnersPage() {
       {/* بک‌گراند نوری */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
       
-      <div className="container mx-auto max-w-5xl">
+      <div className="container mx-auto max-w-6xl">
         
         {/* هدر صفحه */}
         <div className="mb-12">
@@ -88,13 +144,13 @@ export default function PartnersPage() {
         </div>
 
         {/* گرید کارت‌ها */}
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
           {partners.map((partner) => (
             <a
               key={partner.id}
               href={partner.url}
               target="_blank"
-              rel="dofollow" // 👈 مهم برای سئو: انتقال اعتبار دامین
+              rel="dofollow" // 👈 مهم برای سئو
               className={`group relative flex flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${partner.borderColor} ${partner.glow}`}
             >
               <div>

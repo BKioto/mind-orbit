@@ -8,6 +8,9 @@ const vazir = Vazirmatn({
 });
 
 export const metadata: Metadata = {
+  // 👇 این خط برای سئو بسیار مهم است (آدرس پایه سایت)
+  metadataBase: new URL('https://mind-orbit-lyart.vercel.app'),
+
   title: "MindOrbit | هوش مصنوعی و چت بات پیشرفته مایند اوربیت",
   description: "Advanced AI Chatbot built by KiyaDev",
   icons: {
@@ -15,7 +18,7 @@ export const metadata: Metadata = {
     shortcut: "/logo.svg",
     apple: "/logo.svg",
   },
-  // این بخش تاییدیه گوگل هست که اضافه شد
+  // تاییدیه گوگل
   verification: {
     google: "sLK4JJOaw4XxKgoHn42-ry2fAMpI17zKnAUyLjKI6mk",
   },
